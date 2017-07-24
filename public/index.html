@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = "app">
+<head>
+    <meta charset="UTF-8" />
+    <title>ToDolist</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/my.css">
+
+</head>
+<body>
+ <div ng-controller = "MainCtr as mc">
+   <!-- {{mc.getMessage()}} -->
+    <div class="head">
+      <div class="container">
+        <h1>ToDolist</h1>
+        <input type="text" class = "form-control" ng-keydown = "mc.addMessage($event)" placeholder = "添加ToDo">
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="container">
+        <div class = "undoneheader">
+             <h3>正在进行</h3>   <b class = "num">{{mc.getUndone().length}}</b>
+        </div>
+        <ul ng-repeat = "item in mc.getUndone()">
+            <li>
+              <input type="checkbox" ng-model = "item.done" ng-change = "mc.changeDone(item)">
+              <span ng-click = "item.isShow = true" ng-show = "!item.isShow">{{item.content}}</span>
+              <input type="text" ng-show = "item.isShow" ng-blur = "mc.changeContent(item)" ng-model = "item.content">
+              <button class = "btn btn-danger danger" ng-click = "mc.delete(item._id)">x</button>
+            </li>
+        </ul>
+
+        <div class="doneheader">
+              <h3>已经完成</h3> <b class = "num">{{mc.getDone().length}}</b>
+        </div>
+
+        <ul ng-repeat = "item in mc.getDone()" class = "finished">
+            <li>
+              <input type="checkbox" ng-model = "item.done" ng-change = "mc.changeDone(item)">
+              <span ng-click = "item.isShow = true" ng-show = "!item.isShow">{{item.content}}</span>
+              <input type="text" ng-show = "item.isShow" ng-blur = "mc.changeContent(item)" ng-model = "item.content">
+              <button class = "btn btn-danger danger" ng-click = "mc.delete(item._id)">x</button>
+            </li>
+        </ul>
+      </div>
+    </div>
+ </div>
+</body>
+<script src="js/angular.js"></script>
+<script type="text/javascript">
+        var app  = angular.module("app",[]);
+        app.controller("MainCtr",['service',function(service){
+
+            this.getMessage = function(){
+                 return service.getMessage();
+            };
+            this.addMessage = function(event){
+                if(event.keyCode ==13){
+                    service.addMessage(event.target.value);
+                     event.target.value = '';
+                }
+             };
+             this.changeContent = function(item){
+                  item.isShow = false;
+                  service.changeContent(item);
+             };
+             this.changeDone = function(item){
+                  service.changeDone(item);
+             };
+             this.delete = function(id){
+                  service.delete(id);
+             };
+             this.getDone = function(){
+                  return service.getDone();
+             };
+             this.getUndone = function(){
+                  return service.getUndone();
+             }
+        }]);
+        app.factory("service",['$http',function($http){
+             message = [];
+             $http.get('/all').then(function(data){
+                  message = data.data.result;
+             })
+              return{
+                 addMessage: function(mes){
+                     $http.post('/message',{"content":mes}).then(function(data){
+                          message.push(data.data.result);
+                     })
+                 },
+                 getMessage : function(){
+                     return message;
+                 },
+                 changeContent: function(item){
+                      $http.post('/changeContent/'+item._id,{
+                         'content': item.content
+                      }).then(function(data){
+                         console.log(data.data.result);
+                      })
+                 },
+                 changeDone: function(item){
+                     $http.post('/changeDone/'+item._id,
+                        {'done':item.done}).then(function(data){
+                          console.log(data.data.result);
+                     })
+                 },
+                 delete : function(id){
+                     $http({
+                        'method':'delete',
+                        'url': '/delete/'+id
+                     }).then(function(data){
+                         if(data.data.result==1){
+                            for(var i=0;i<message.length;i++){
+                                 if(message[i]._id == id){
+                                     message.splice(i,1);
+                                 }
+                            }
+                         }
+                     })
+                 },
+                 getDone:function(){
+                     return message.filter(function(item){
+                          return item.done;
+                     })
+                 },
+                 getUndone:function(){
+                     return message.filter(function(item){
+                          return !item.done
+                     })
+                 }
+              }
+        }])
+</script>
+</html>

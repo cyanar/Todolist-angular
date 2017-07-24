@@ -1,0 +1,84 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+ol, ul ,li{list-style: none;}
+body{
+     font-family:"microsoft yahei";
+     background: #cdcdcd;
+}
+.container {
+    width: 800px;
+    margin: 0 auto;
+}
+.head{
+     width: 100%;
+     margin:0 auto;
+    background: #323232;
+    overflow:hidden;
+    margin-bottom:30px;
+   }
+h1{
+    float:left;
+    height: 50px;
+    color:#ddd;
+    margin-top:0px;
+    font-size: 26px;
+    line-height: 50px;
+}
+.head input{
+    width: 300px;
+    margin-left:300px;
+    height:26px;
+    margin-top:14px;
+}
+button.danger{
+     width: 26px;
+     height: 26px;
+     line-height: 6px;
+     padding:0px;
+     padding-left:1px;
+     position:absolute;
+     right:6px;
+}
+.foot h3{
+    font-weight: bold;
+    float:left;
+}
+.foot span{
+    cursor:pointer;
+}
+.foot ul li{
+   background: #fff;
+   font-size: 18px;
+   position:relative;
+   padding:4px;
+   border-radius:4px;
+   border-left:6px solid #629a9c;
+}
+.foot input[type=checkbox]{
+     width: 20px;
+     height: 20px;
+     background:#878787;
+}
+.foot .finished li{
+    background: #e6e6e6;
+    border-left:6px solid #b3b3b3;
+}
+.foot .finished .danger{
+    background: #b3b3b3;
+    border-color:#b3b3b3;
+}
+.foot b.num{
+     float:right;
+     width: 20px;
+     height: 20px;
+     background: #e6e6fa;
+     margin-top:20px;
+     line-height: 20px;
+     text-align: center;
+     border-radius:50%;
+}
+.foot .undoneheader,.doneheader{
+    overflow:hidden;
+}
