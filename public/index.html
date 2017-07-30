@@ -22,8 +22,8 @@
         <div class = "undoneheader">
              <h3>正在进行</h3>   <b class = "num">{{mc.getUndone().length}}</b>
         </div>
-        <ul ng-repeat = "item in mc.getUndone()">
-            <li>
+        <ul class = "undone">
+            <li ng-repeat = "item in mc.getUndone()">
               <input type="checkbox" ng-model = "item.done" ng-change = "mc.changeDone(item)">
               <span ng-click = "item.isShow = true" ng-show = "!item.isShow">{{item.content}}</span>
               <input type="text" ng-show = "item.isShow" ng-blur = "mc.changeContent(item)" ng-model = "item.content">
@@ -35,8 +35,8 @@
               <h3>已经完成</h3> <b class = "num">{{mc.getDone().length}}</b>
         </div>
 
-        <ul ng-repeat = "item in mc.getDone()" class = "finished">
-            <li>
+        <ul class = "finished">
+            <li ng-repeat = "item in mc.getDone()">
               <input type="checkbox" ng-model = "item.done" ng-change = "mc.changeDone(item)">
               <span ng-click = "item.isShow = true" ng-show = "!item.isShow">{{item.content}}</span>
               <input type="text" ng-show = "item.isShow" ng-blur = "mc.changeContent(item)" ng-model = "item.content">
@@ -48,6 +48,8 @@
  </div>
 </body>
 <script src="js/angular.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/jqueryui.js"></script>
 <script type="text/javascript">
         var app  = angular.module("app",[]);
         app.controller("MainCtr",['service',function(service){
@@ -76,7 +78,7 @@
              };
              this.getUndone = function(){
                   return service.getUndone();
-             }
+             };
         }]);
         app.factory("service",['$http',function($http){
              message = [];
@@ -130,6 +132,9 @@
                      })
                  }
               }
-        }])
+        }]);
+
+        $('.undone').sortable();
+        $('.finished').sortable();
 </script>
 </html>
